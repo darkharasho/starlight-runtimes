@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "cheatEngine": {
+    "version": "7.6.6-4",
+    "platforms": {
+      "linux-x64": {
+        "url": "https://github.com/darkharasho/starlight-runtimes/releases/download/ce-7.6.6-4-linux/CheatEngineLinux766-4.zip",
+        "sha256": "4697078bd9ea92c4fe7ec636dbb0948c0821cf400ec710e942ed1f6c8a27e308",
+        "sizeBytes": 24324334,
+        "extractedDir": "CheatEngineLinux766-4",
+        "binaryRelative": "cheatengine-x86_64",
+        "upstream": "https://cheatengine.org/download/CheatEngineLinux766-4.zip"
+      }
+    }
+  }
+}
