@@ -11,6 +11,15 @@
         "binaryRelative": "cheatengine-x86_64",
         "upstream": "https://cheatengine.org/download/CheatEngineLinux766-4.zip"
       }
+    },
+    "windows": {
+      "version": "7.5",
+      "url": "https://github.com/darkharasho/starlight-runtimes/releases/download/ce-7.5-windows/CheatEngineWindows75.zip",
+      "sha256": "5c86c2e27b62b9fa89b2bf77463e67755579b8bcdd353a92214975315c15a493",
+      "sizeBytes": 33915678,
+      "extractInto": "CheatEngineLinux766-4/windowsbin",
+      "note": "Windows CE for cheating Proton games (run inside the game's prefix). Includes lua/json.lua for the Starlight bridge autorun.",
+      "upstream": "CheatEngine75.exe extracted via innoextract (adware-free)"
     }
   }
 }
