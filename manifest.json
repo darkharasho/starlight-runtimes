@@ -20,6 +20,16 @@
       "extractInto": "CheatEngineLinux766-4/windowsbin",
       "note": "Windows CE for cheating Proton games (run inside the game's prefix). Includes lua/json.lua for the Starlight bridge autorun.",
       "upstream": "CheatEngine75.exe extracted via innoextract (adware-free)"
+    },
+    "ceserver": {
+      "version": "7.5",
+      "url": "https://github.com/darkharasho/starlight-runtimes/releases/download/ceserver-7.5/ceserver-7.5-linux-x64.zip",
+      "sha256": "46c9cb159a72adb8432822b626257cf7c1852908d7868963c0e57dc3a99419c8",
+      "sizeBytes": 61739,
+      "extractedDir": "ceserver-7.5",
+      "binaryRelative": "ceserver-7.5/ceserver",
+      "note": "Cheat Engine's Linux memory server, built from the 7.5 source with ceserver/starlight.patch. Windows CE connects to it to cheat native Linux games.",
+      "source": "https://github.com/cheat-engine/cheat-engine/tree/7.5/Cheat%20Engine/ceserver"
     }
   }
 }
