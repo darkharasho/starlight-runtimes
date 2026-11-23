@@ -1,0 +1,48 @@
+diff --git a/Cheat Engine/ceserver/ceserver.c b/Cheat Engine/ceserver/ceserver.c
+index 1eab650..f0eed91 100755
+--- a/Cheat Engine/ceserver/ceserver.c	
++++ b/Cheat Engine/ceserver/ceserver.c	
+@@ -1992,7 +1992,8 @@ int main(int argc, char *argv[])
+   debug_log("CEServer. Waiting for client connection\n");
+ 
+   //if (broadcast)
+-  pthread_create(&identifierthread, NULL, IdentifierThread, NULL);
++  //starlight: no LAN discovery broadcast (UDP 3296)
++  //pthread_create(&identifierthread, NULL, IdentifierThread, NULL);
+ 
+   s=socket(AF_INET, SOCK_STREAM, 0);
+   debug_log("socket=%d\n", s);
+@@ -2000,7 +2001,7 @@ int main(int argc, char *argv[])
+   memset(&addr, 0, sizeof(addr));
+   addr.sin_family=AF_INET;
+   addr.sin_port=htons(PORT);
+-  addr.sin_addr.s_addr=INADDR_ANY;
++  addr.sin_addr.s_addr=htonl(INADDR_LOOPBACK); //starlight: only this machine may connect
+ 
+   int optval = 1;
+   setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof (optval));
+diff --git a/Cheat Engine/ceserver/extensionloader.c b/Cheat Engine/ceserver/extensionloader.c
+index 7ceefb7..7c1d17f 100755
+--- a/Cheat Engine/ceserver/extensionloader.c	
++++ b/Cheat Engine/ceserver/extensionloader.c	
+@@ -1376,13 +1376,18 @@ int loadCEServerExtension(HANDLE hProcess)
+       char *mp;
+ 
+ 
+-      l=readlink("/proc/self/exe", modulepath2, 256);
++      l=readlink("/proc/self/exe", modulepath2, 255);
+ 
+       if (l!=-1)
+       {
+         modulepath2[l]=0;
+         debug_log("modulepath2=%s\n", modulepath2);
+-        sscanf(modulepath2,"%s", modulepath); //sometimes it has a (deleted) text after it
++        //starlight: keep spaces in the path; only drop a trailing " (deleted)"
++        strcpy(modulepath, modulepath2);
++        {
++          char *deleted=strstr(modulepath, " (deleted)");
++          if (deleted) *deleted=0;
++        }
+ 
+         debug_log("modulepath=%s\n", modulepath);
+         mp=dirname(modulepath);

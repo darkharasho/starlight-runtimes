@@ -1,0 +1,41 @@
+name: ceserver
+
+# Builds ceserver from the Cheat Engine source and, on a ceserver-* tag,
+# publishes it as a release. Then put the printed sha256/size into
+# manifest.json's cheatEngine.ceserver entry.
+on:
+  pull_request:
+    paths: ['ceserver/**', '.github/workflows/ceserver.yml']
+  push:
+    tags: ['ceserver-*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    # The oldest supported runner, so the binary runs on any newer glibc.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y zlib1g-dev zip
+      - id: build
+        run: |
+          ceserver/build.sh dist | tee build.log
+          echo "zip=$(sed -n 's/^zip: //p' build.log)" >> "$GITHUB_OUTPUT"
+      - run: |
+          unzip -q -o "${{ steps.build.outputs.zip }}" -d check
+          file check/ceserver-*/ceserver check/ceserver-*/*.so
+          objdump -T check/ceserver-*/ceserver | grep -o 'GLIBC_[0-9.]*' | sort -Vu | tail -1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ceserver
+          path: dist/*.zip
+      - if: startsWith(github.ref, 'refs/tags/ceserver-')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.zip \
+            --title "ceserver ${GITHUB_REF_NAME#ceserver-} (Linux, for native games)" \
+            --notes "Cheat Engine's ceserver built from the GPLv2 source with ceserver/starlight.patch. $(grep -E '^(sha256|size):' build.log | tr '\n' ' ')"
